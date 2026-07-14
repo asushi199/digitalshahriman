@@ -10,3 +10,5 @@
 - Full design specification: `docs/superpowers/specs/2026-07-14-smkrs-digital-portal-design.md`.
 - Bootstrapped a static React, TypeScript, and Vite application with Vitest and Testing Library.
 - Foundation verification: 1 test passed, ESLint reported no errors, and the production build completed successfully.
+- Task 3 preserved the official crest as a byte-identical public asset and added a typed `SystemCard` with safe external-link attributes, visible focus treatment, and reduced-motion behavior.
+- Task 3 verification: the focused card test passed (1/1); the full suite passed (5/5), ESLint reported no errors, and the production build completed successfully.
