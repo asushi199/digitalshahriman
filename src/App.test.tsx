@@ -8,4 +8,17 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /SMK Raja Shahriman Digital/i })).toBeInTheDocument()
     expect(screen.getByText('Satu Pusat, Semua Sistem')).toBeInTheDocument()
   })
+
+  it('connects the hero navigation to both discovery sections', () => {
+    render(<App />)
+
+    expect(screen.getByRole('heading', { name: 'eSistem Pilihan' }).closest('section')).toHaveAttribute(
+      'id',
+      'featured-systems',
+    )
+    expect(screen.getByRole('heading', { name: 'Semua eSistem' }).closest('section')).toHaveAttribute(
+      'id',
+      'all-systems',
+    )
+  })
 })

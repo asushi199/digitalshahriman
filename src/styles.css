@@ -564,6 +564,261 @@ img {
   height: 1rem;
 }
 
+.discovery-section {
+  width: min(100% - 3rem, 92rem);
+  margin-inline: auto;
+  padding-block: clamp(5rem, 9vw, 8rem);
+  scroll-margin-top: 1rem;
+}
+
+.discovery-section--featured {
+  position: relative;
+}
+
+.discovery-section--featured::before {
+  position: absolute;
+  z-index: -1;
+  inset: 12% 45% 8% -20%;
+  content: "";
+  background: rgb(24 87 216 / 10%);
+  filter: blur(7rem);
+  pointer-events: none;
+}
+
+.discovery-section--directory {
+  border-top: 1px solid rgb(255 255 255 / 8%);
+}
+
+.discovery-section__heading {
+  display: grid;
+  gap: 0.65rem;
+  margin-bottom: 2.5rem;
+}
+
+.discovery-section__heading p {
+  margin: 0;
+  color: var(--school-yellow);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.discovery-section__heading h2 {
+  margin: 0;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.featured-rail {
+  display: grid;
+  gap: 1rem;
+}
+
+.featured-rail__controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.featured-rail__controls button {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 50%;
+  cursor: pointer;
+  place-items: center;
+  transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.featured-rail__controls button:not(:disabled):is(:hover, :focus-visible) {
+  color: var(--school-yellow);
+  border-color: var(--school-yellow);
+  transform: translateY(-2px);
+}
+
+.featured-rail__controls button:focus-visible,
+.system-directory__filters button:focus-visible,
+.system-directory__empty button:focus-visible,
+.system-directory__search input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.featured-rail__controls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.featured-rail__controls button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.featured-rail__controls span {
+  min-width: 4.3rem;
+  color: var(--muted);
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.featured-rail__track {
+  display: grid;
+  grid-auto-columns: minmax(min(76vw, 31rem), 42rem);
+  grid-auto-flow: column;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.35rem 1.5rem;
+  scroll-padding-inline: 0.35rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: var(--school-blue) rgb(255 255 255 / 8%);
+  scrollbar-width: thin;
+}
+
+.featured-rail__item {
+  scroll-snap-align: start;
+}
+
+.featured-rail__item .system-card {
+  height: 100%;
+}
+
+.system-directory,
+.system-directory__tools {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.system-directory__search {
+  position: relative;
+  display: grid;
+  gap: 0.65rem;
+  max-width: 44rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.system-directory__search svg {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--school-yellow);
+  pointer-events: none;
+}
+
+.system-directory__search input {
+  width: 100%;
+  min-height: 3.4rem;
+  padding: 0.85rem 1rem 0.85rem 3rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid rgb(255 255 255 / 15%);
+  border-radius: 0.25rem;
+  text-transform: none;
+}
+
+.system-directory__search input::placeholder {
+  color: rgb(174 183 197 / 70%);
+}
+
+.system-directory__search input:focus {
+  border-color: var(--school-yellow);
+}
+
+.system-directory__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.system-directory__filters button,
+.system-directory__empty button {
+  min-height: 2.65rem;
+  padding: 0.65rem 1rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: transparent;
+  border: 1px solid rgb(255 255 255 / 15%);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.system-directory__filters button[aria-pressed='true'] {
+  color: var(--ink);
+  background: var(--school-yellow);
+  border-color: var(--school-yellow);
+}
+
+.system-directory__count {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.system-directory__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 27rem), 1fr));
+  gap: 1rem;
+}
+
+.system-directory__grid .system-card {
+  height: 100%;
+}
+
+.system-directory__empty {
+  display: grid;
+  justify-items: center;
+  min-height: 18rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(145deg, rgb(24 87 216 / 8%), transparent 70%);
+  border: 1px dashed rgb(255 255 255 / 18%);
+  place-content: center;
+}
+
+.system-directory__empty svg {
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 1rem;
+  color: var(--school-red);
+}
+
+.system-directory__empty strong {
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 1.7rem;
+  text-transform: uppercase;
+}
+
+.system-directory__empty p {
+  margin: 0.65rem 0 1.5rem;
+  color: var(--muted);
+}
+
+.system-directory__empty button {
+  color: var(--ink);
+  background: var(--school-yellow);
+  border-color: var(--school-yellow);
+}
+
 @media (max-width: 70rem) {
   .hero__inner {
     grid-template-columns: minmax(20rem, 0.9fr) minmax(25rem, 1.1fr);
@@ -620,6 +875,14 @@ img {
   .hero__scroll-cue {
     display: none;
   }
+
+  .discovery-section {
+    width: min(100% - 2rem, 38rem);
+  }
+
+  .featured-rail__track {
+    grid-auto-columns: calc(100vw - 3rem);
+  }
 }
 
 @media (max-width: 36rem) {
@@ -658,6 +921,21 @@ img {
     grid-column: 2;
     justify-self: start;
   }
+
+  .featured-rail__controls {
+    justify-content: space-between;
+  }
+
+  .system-directory__filters {
+    flex-wrap: nowrap;
+    margin-inline: -1rem;
+    padding: 0 1rem 0.5rem;
+    overflow-x: auto;
+  }
+
+  .system-directory__filters button {
+    flex: 0 0 auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -680,6 +958,10 @@ img {
   }
 
   .system-card {
+    transition: none;
+  }
+
+  .featured-rail__controls button {
     transition: none;
   }
 
