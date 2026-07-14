@@ -5,6 +5,22 @@ const LOADER_DURATION = 1_200
 const LOADER_STEP = 20
 const SESSION_KEY = 'smkrs-loader-seen'
 
+function shouldSkipForSession() {
+  try {
+    return sessionStorage.getItem(SESSION_KEY) === 'true'
+  } catch {
+    return true
+  }
+}
+
+function rememberLoaderForSession() {
+  try {
+    sessionStorage.setItem(SESSION_KEY, 'true')
+  } catch {
+    // Storage can be unavailable without blocking access to the portal.
+  }
+}
+
 interface PortalLoaderProps {
   criticalArtworkFailed?: boolean
   reducedMotion: boolean
@@ -19,7 +35,7 @@ export function PortalLoader({
   const shouldSkip =
     criticalArtworkFailed ||
     reducedMotion ||
-    sessionStorage.getItem(SESSION_KEY) === 'true'
+    shouldSkipForSession()
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(!shouldSkip)
   const completed = useRef(false)
@@ -29,17 +45,13 @@ export function PortalLoader({
       if (completed.current) return
 
       completed.current = true
-      sessionStorage.setItem(SESSION_KEY, 'true')
+      rememberLoaderForSession()
       setProgress(100)
       setVisible(false)
       onComplete()
     }
 
-    if (
-      criticalArtworkFailed ||
-      reducedMotion ||
-      sessionStorage.getItem(SESSION_KEY) === 'true'
-    ) {
+    if (shouldSkip) {
       finish()
       return
     }
@@ -60,7 +72,7 @@ export function PortalLoader({
     }, LOADER_STEP)
 
     return () => window.clearInterval(timer)
-  }, [criticalArtworkFailed, onComplete, reducedMotion])
+  }, [onComplete, shouldSkip])
 
   if (!visible) return null
 
