@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { useReducedMotion } from 'framer-motion'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -15,6 +15,7 @@ vi.mock('framer-motion', async (importOriginal) => {
 
 describe('completed portal composition', () => {
   beforeEach(() => {
+    sessionStorage.clear()
     vi.mocked(useReducedMotion).mockReturnValue(true)
   })
 
@@ -41,5 +42,23 @@ describe('completed portal composition', () => {
     expect(
       screen.getByText(/eSistem yang dipautkan beroperasi di destinasi masing-masing/i),
     ).toBeInTheDocument()
+  })
+
+  it('completes the loader immediately when the mascot artwork fails', () => {
+    vi.mocked(useReducedMotion).mockReturnValue(false)
+
+    render(<App />)
+
+    expect(screen.getByRole('status', { name: 'Portal sedang dimuatkan' })).toBeInTheDocument()
+
+    const mascot = document.querySelector<HTMLImageElement>(
+      'img[src="/mascot/smkrs-robot.png"]',
+    )
+
+    expect(mascot).not.toBeNull()
+    fireEvent.error(mascot as HTMLImageElement)
+
+    expect(screen.queryByRole('status', { name: 'Portal sedang dimuatkan' })).not.toBeInTheDocument()
+    expect(screen.getByRole('main')).toHaveAttribute('data-loader-complete', 'true')
   })
 })

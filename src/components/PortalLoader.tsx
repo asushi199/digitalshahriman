@@ -6,16 +6,20 @@ const LOADER_STEP = 20
 const SESSION_KEY = 'smkrs-loader-seen'
 
 interface PortalLoaderProps {
+  criticalArtworkFailed?: boolean
   reducedMotion: boolean
   onComplete: () => void
 }
 
 export function PortalLoader({
+  criticalArtworkFailed = false,
   reducedMotion,
   onComplete,
 }: PortalLoaderProps) {
   const shouldSkip =
-    reducedMotion || sessionStorage.getItem(SESSION_KEY) === 'true'
+    criticalArtworkFailed ||
+    reducedMotion ||
+    sessionStorage.getItem(SESSION_KEY) === 'true'
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(!shouldSkip)
   const completed = useRef(false)
@@ -31,7 +35,11 @@ export function PortalLoader({
       onComplete()
     }
 
-    if (reducedMotion || sessionStorage.getItem(SESSION_KEY) === 'true') {
+    if (
+      criticalArtworkFailed ||
+      reducedMotion ||
+      sessionStorage.getItem(SESSION_KEY) === 'true'
+    ) {
       finish()
       return
     }
@@ -52,7 +60,7 @@ export function PortalLoader({
     }, LOADER_STEP)
 
     return () => window.clearInterval(timer)
-  }, [onComplete, reducedMotion])
+  }, [criticalArtworkFailed, onComplete, reducedMotion])
 
   if (!visible) return null
 

@@ -11,16 +11,25 @@ import { systems } from './data/systems'
 export default function App() {
   const prefersReducedMotion = useReducedMotion() ?? false
   const [loaderComplete, setLoaderComplete] = useState(false)
+  const [criticalArtworkFailed, setCriticalArtworkFailed] = useState(false)
   const finishLoader = useCallback(() => setLoaderComplete(true), [])
+  const handleMascotLoadError = useCallback(
+    () => setCriticalArtworkFailed(true),
+    [],
+  )
 
   return (
     <>
       <PortalLoader
+        criticalArtworkFailed={criticalArtworkFailed}
         reducedMotion={prefersReducedMotion}
         onComplete={finishLoader}
       />
       <main data-loader-complete={loaderComplete}>
-        <HeroSection reducedMotion={prefersReducedMotion} />
+        <HeroSection
+          reducedMotion={prefersReducedMotion}
+          onMascotLoadError={handleMascotLoadError}
+        />
         <section
           aria-labelledby="featured-systems-title"
           className="discovery-section discovery-section--featured"

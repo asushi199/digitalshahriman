@@ -5,9 +5,13 @@ import { RobotScene } from './RobotScene'
 
 interface HeroSectionProps {
   reducedMotion: boolean
+  onMascotLoadError?: () => void
 }
 
-export function HeroSection({ reducedMotion }: HeroSectionProps) {
+export function HeroSection({
+  reducedMotion,
+  onMascotLoadError,
+}: HeroSectionProps) {
   const reveal = reducedMotion
     ? { initial: false as const, animate: undefined }
     : { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 } }
@@ -59,7 +63,10 @@ export function HeroSection({ reducedMotion }: HeroSectionProps) {
           </div>
         </motion.div>
 
-        <RobotScene reducedMotion={reducedMotion} />
+        <RobotScene
+          reducedMotion={reducedMotion}
+          onMascotLoadError={onMascotLoadError}
+        />
       </div>
 
       <div className="hero__scroll-cue" aria-hidden="true">

@@ -7,9 +7,13 @@ const TABLET_TRANSLATION = 6
 
 interface RobotSceneProps {
   reducedMotion: boolean
+  onMascotLoadError?: () => void
 }
 
-export function RobotScene({ reducedMotion }: RobotSceneProps) {
+export function RobotScene({
+  reducedMotion,
+  onMascotLoadError,
+}: RobotSceneProps) {
   const targetX = useMotionValue(0)
   const targetY = useMotionValue(0)
   const x = useSpring(targetX, { stiffness: 95, damping: 20, mass: 0.5 })
@@ -66,6 +70,7 @@ export function RobotScene({ reducedMotion }: RobotSceneProps) {
           draggable="false"
           onError={(event) => {
             event.currentTarget.hidden = true
+            onMascotLoadError?.()
           }}
         />
       </motion.div>

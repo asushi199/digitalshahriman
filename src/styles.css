@@ -1084,10 +1084,6 @@ img {
     justify-content: space-between;
   }
 
-  .featured-rail__track {
-    touch-action: pan-x;
-  }
-
   .system-directory__filters {
     flex-wrap: nowrap;
     margin-inline: -1rem;
