@@ -1,9 +1,38 @@
 <!doctype html>
-<html lang="ms">
+<html lang="ms" data-theme="night">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SMK Raja Shahriman Digital</title>
+    <meta
+      name="description"
+      content="Portal Digital SERASHA — satu portal untuk semua eSistem SMK Raja Shahriman, Beruas, Perak."
+    />
+    <meta name="theme-color" content="#070b18" />
+    <link rel="icon" href="/brand/smkrs-crest.jpg" />
+    <title>Portal Digital SERASHA · SMK Raja Shahriman</title>
+    <script>
+      // Tetapkan tema sebelum lukisan pertama untuk mengelakkan kelipan.
+      ;(function () {
+        var theme
+        try {
+          theme = new URLSearchParams(window.location.search).get('theme')
+        } catch (error) {
+          theme = null
+        }
+        if (theme !== 'day' && theme !== 'night') {
+          try {
+            theme = localStorage.getItem('serasha-theme')
+          } catch (error) {
+            theme = null
+          }
+        }
+        if (theme !== 'day' && theme !== 'night') {
+          var hour = new Date().getHours()
+          theme = hour >= 7 && hour < 19 ? 'day' : 'night'
+        }
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

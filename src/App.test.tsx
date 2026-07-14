@@ -1,24 +1,57 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import userEvent from '@testing-library/user-event'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+
 import App from './App'
+import { initialTheme } from './lib/theme'
 
 describe('App', () => {
-  it('introduces the SMKRS digital portal in Malay', () => {
-    render(<App />)
-    expect(screen.getByRole('heading', { name: /SMK Raja Shahriman Digital/i })).toBeInTheDocument()
-    expect(screen.getByText('Satu Pusat, Semua Sistem')).toBeInTheDocument()
+  beforeEach(() => {
+    sessionStorage.setItem('serasha-loader-seen', 'true')
+    localStorage.clear()
+    delete document.documentElement.dataset.theme
   })
 
-  it('connects the hero navigation to both discovery sections', () => {
+  afterEach(() => {
+    sessionStorage.clear()
+    localStorage.clear()
+  })
+
+  it('renders the SERASHA hero and school identity', () => {
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: 'eSistem Pilihan' }).closest('section')).toHaveAttribute(
-      'id',
-      'featured-systems',
-    )
-    expect(screen.getByRole('heading', { name: 'Semua eSistem' }).closest('section')).toHaveAttribute(
-      'id',
-      'all-systems',
-    )
+    expect(
+      screen.getByRole('heading', { level: 1, name: /SERASHA/i }),
+    ).toBeInTheDocument()
+    expect(screen.getByText(/Satu portal, semua eSistem/i)).toBeInTheDocument()
+  })
+
+  it('toggles the day and night theme on the root element', async () => {
+    const user = userEvent.setup()
+    localStorage.setItem('serasha-theme', 'night')
+    render(<App />)
+
+    expect(document.documentElement.dataset.theme).toBe('night')
+
+    await user.click(screen.getByRole('button', { name: /Tukar ke tema siang/i }))
+
+    expect(document.documentElement.dataset.theme).toBe('day')
+    expect(localStorage.getItem('serasha-theme')).toBe('day')
+  })
+})
+
+describe('initialTheme', () => {
+  afterEach(() => {
+    localStorage.clear()
+  })
+
+  it('prefers a stored choice over the clock', () => {
+    localStorage.setItem('serasha-theme', 'day')
+    expect(initialTheme(new Date('2026-07-14T22:00:00'))).toBe('day')
+  })
+
+  it('falls back to daytime hours when nothing is stored', () => {
+    expect(initialTheme(new Date('2026-07-14T10:00:00'))).toBe('day')
+    expect(initialTheme(new Date('2026-07-14T22:00:00'))).toBe('night')
   })
 })

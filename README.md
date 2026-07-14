@@ -1,6 +1,6 @@
-# Portal Digital SMK Raja Shahriman
+# Portal Digital SERASHA
 
-Portal statik sehenti untuk kakitangan dan warga sekolah mengakses eSistem SMK Raja Shahriman. Antara muka dibina dengan React, TypeScript dan Vite, manakala semua pautan sistem dikawal melalui satu fail konfigurasi bertulis jenis.
+Portal satu skrin bergaya sinematik untuk warga SMK Raja Shahriman (SERASHA), Beruas, Perak. Halaman ini memaparkan skrin pemuatan peratusan, langit animasi penuh kod dengan tema siang/malam, tipografi paparan besar, dan rel kad eSistem yang bergerak tanpa henti di bahagian bawah. Dibina dengan React, TypeScript dan Vite.
 
 ## Jalankan secara tempatan
 
@@ -25,22 +25,32 @@ Arahan binaan menghasilkan laman statik dalam direktori `dist/`. Muat naik kandu
 
 ## Tambah atau kemas kini eSistem
 
-Semua rekod berada di `src/data/systems.ts`. Tambah atau ubah objek dalam tatasusunan `systems`; komponen, carian, penapis kategori dan bahagian pilihan tidak perlu diubah. Setiap rekod mesti mematuhi kontrak `SystemEntry`:
+Semua rekod berada di `src/data/systems.ts` dan mematuhi kontrak `SystemEntry` (`src/types/system.ts`). Setiap sistem muncul secara automatik sebagai kad dalam rel bawah; tiada komponen perlu diubah. Medan penting:
 
-- `id`: pengecam unik dalam format ringkas, contohnya `tempahan-makmal`.
+- `id`: pengecam unik ringkas, contohnya `tempahan-makmal`.
 - `name` dan `description`: teks paparan dalam Bahasa Melayu.
-- `category`: salah satu `Akademik`, `Pengurusan`, `Kemudahan` atau `Sokongan Digital`.
-- `url`: alamat HTTPS penuh. Pautan akan dibuka dalam tab baharu dengan perlindungan `noopener noreferrer`.
+- `url`: alamat HTTPS penuh; dibuka dalam tab baharu dengan `noopener noreferrer`.
 - `icon`: salah satu `book-open`, `calendar-days`, `file-text` atau `life-buoy`.
-- `accent`: warna CSS yang sah, sebaik-baiknya daripada palet rasmi sekolah.
-- `featured`: `true` untuk dipaparkan pada rel pilihan.
-- `order`: nombor susunan; nombor lebih kecil dipaparkan dahulu.
+- `accent`: warna CSS untuk sinaran kad.
+- `order`: nombor susunan; nombor kecil dahulu.
 
-Reka bentuk direktori menyokong penambahan sehingga 15 rekod melalui fail ini sahaja.
+## Identiti sekolah dan imej latar
+
+Maklumat sekolah (nama, cogan kata, baris hak cipta) berada di `src/data/site.ts`. Fail yang sama menyediakan slot `heroImage`:
+
+```ts
+heroImage: {
+  day: '/hero/sekolah-siang.jpg',
+  night: '/hero/sekolah-malam.jpg',
+},
+```
+
+Letakkan imej dalam `public/hero/` dan isi laluan di atas — imej akan menjadi latar penuh skrin dan lapisan awan kod bertukar menjadi hiasan nipis. Biarkan kosong untuk kekal dengan langit animasi penuh kod.
+
+## Tema siang/malam
+
+Butang di bar navigasi menukar tema dan pilihan disimpan dalam `localStorage`. Tema awal mengikut jam tempatan pelawat (7 pagi–7 malam = siang) dan boleh dipaksa melalui parameter URL `?theme=day` atau `?theme=night`.
 
 ## Skop dan kebolehcapaian
 
-Portal ini tidak menggunakan pangkalan data atau panel pentadbir. Ia menyediakan carian, penapis, navigasi papan kekunci, fokus yang jelas, rel sentuh pada telefon, serta paparan yang menghormati pilihan `prefers-reduced-motion`.
-
-Spesifikasi reka bentuk: `docs/superpowers/specs/2026-07-14-smkrs-digital-portal-design.md`.
-
+Portal ini statik tanpa pangkalan data. Ia menghormati `prefers-reduced-motion` (skrin pemuatan dilangkau, rel menjadi senarai statik yang boleh ditatal), mengekalkan fokus papan kekunci yang jelas, dan gagal terbuka apabila storan pelayar disekat.

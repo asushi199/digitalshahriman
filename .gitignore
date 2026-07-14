@@ -10,3 +10,8 @@ Thumbs.db
 *.log
 *.tsbuildinfo
 .vercel/
+
+# Media rujukan tempatan & konfigurasi tempatan
+reference movie/
+*.mp4
+.claude/

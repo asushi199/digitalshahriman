@@ -18,6 +18,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@fontsource/caveat": "^5.2.8",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.24.0",
     "react": "^19.2.7",
