@@ -1,7 +1,144 @@
 :root {
+  --ink: #07090d;
+  --surface: #10151e;
+  --surface-raised: #171e2a;
+  --school-red: #e3262e;
+  --school-blue: #1857d8;
+  --school-yellow: #ffd900;
+  --text: #f6f7f2;
+  --muted: #aeb7c5;
+  --focus: #ffe66d;
   font-family: system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  color: var(--text);
+  background: var(--ink);
+}
+
+.system-card {
+  --card-accent: var(--school-yellow);
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  min-height: 10rem;
+  padding: 1.25rem;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--card-accent) 28%, transparent);
+  border-radius: 0.75rem;
+  box-shadow: inset 3px 0 0 var(--card-accent);
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.system-card:is(:hover, :focus-visible),
+.system-card[data-active='true'] {
+  background: var(--surface-raised);
+  border-color: var(--card-accent);
+  box-shadow:
+    inset 3px 0 0 var(--card-accent),
+    0 0 1.5rem color-mix(in srgb, var(--card-accent) 18%, transparent);
+  transform: scale(1.015);
+}
+
+.system-card:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.system-card:active {
+  transform: scale(0.985);
+}
+
+.system-card__icon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  color: var(--ink);
+  background: var(--card-accent);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.system-card__icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2;
+}
+
+.system-card__content {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.system-card__category {
+  color: var(--card-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.system-card__name {
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  line-height: 1.1;
+}
+
+.system-card__description {
+  max-width: 46ch;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.system-card__cue {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  align-self: end;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.system-card__cue svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 36rem) {
+  .system-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .system-card__cue {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .system-card {
+    transition: none;
+  }
+
+  .system-card:is(:hover, :focus-visible),
+  .system-card[data-active='true'],
+  .system-card:active {
+    transform: none;
+  }
 }
