@@ -216,6 +216,133 @@ function SkyCanvas({ theme, reducedMotion }: SkySceneProps) {
   return <canvas ref={canvasRef} className="sky__canvas" />
 }
 
+interface HudNode {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  pulse: number
+  speed: number
+}
+
+function HudCanvas({ reducedMotion }: { reducedMotion: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const context = canvas.getContext('2d')
+    if (!context) return
+
+    let width = 0
+    let height = 0
+    let nodes: HudNode[] = []
+    let frame = 0
+    let animationId = 0
+    let nodeColor = '#ffd24a'
+    let lineColor = 'rgba(255, 210, 74, 0.38)'
+
+    const readColors = () => {
+      const styles = getComputedStyle(document.documentElement)
+      nodeColor = styles.getPropertyValue('--hud-node').trim() || '#ffd24a'
+      lineColor = styles.getPropertyValue('--hud-line').trim() || 'rgba(255, 210, 74, 0.38)'
+    }
+
+    const spawnNodes = (count: number) =>
+      Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height * 0.82,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.28,
+        pulse: Math.random() * Math.PI * 2,
+        speed: 0.02 + Math.random() * 0.03,
+      }))
+
+    const resize = () => {
+      width = canvas.clientWidth
+      height = canvas.clientHeight
+      const isNarrow = width < 768
+      const ratio = Math.min(window.devicePixelRatio || 1, isNarrow ? 1 : 1.5)
+      canvas.width = Math.round(width * ratio)
+      canvas.height = Math.round(height * ratio)
+      context.setTransform(ratio, 0, 0, ratio, 0, 0)
+      nodes = spawnNodes(isNarrow ? 14 : 24)
+      readColors()
+    }
+
+    const drawFrame = (animate: boolean) => {
+      context.clearRect(0, 0, width, height)
+      const linkDistance = Math.min(width, height) * 0.18
+
+      for (let i = 0; i < nodes.length; i += 1) {
+        for (let j = i + 1; j < nodes.length; j += 1) {
+          const a = nodes[i]
+          const b = nodes[j]
+          const dx = a.x - b.x
+          const dy = a.y - b.y
+          const dist = Math.hypot(dx, dy)
+          if (dist > linkDistance) continue
+          context.globalAlpha = (1 - dist / linkDistance) * 0.55
+          context.strokeStyle = lineColor
+          context.lineWidth = 1
+          context.beginPath()
+          context.moveTo(a.x, a.y)
+          context.lineTo(b.x, b.y)
+          context.stroke()
+        }
+      }
+
+      for (const node of nodes) {
+        if (animate) {
+          node.x += node.vx
+          node.y += node.vy
+          node.pulse += node.speed
+          if (node.x < 0 || node.x > width) node.vx *= -1
+          if (node.y < 0 || node.y > height * 0.88) node.vy *= -1
+        }
+        const radius = 1.6 + (0.5 + Math.sin(node.pulse) / 2) * 1.4
+        context.globalAlpha = 0.75 + Math.sin(node.pulse) * 0.2
+        context.fillStyle = nodeColor
+        context.beginPath()
+        context.arc(node.x, node.y, radius, 0, Math.PI * 2)
+        context.fill()
+      }
+      context.globalAlpha = 1
+    }
+
+    const step = () => {
+      frame += 1
+      if (frame % 90 === 0) readColors()
+      drawFrame(true)
+      animationId = window.requestAnimationFrame(step)
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    const onThemeChange = () => readColors()
+    const observer = new MutationObserver(onThemeChange)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    })
+
+    if (reducedMotion) {
+      drawFrame(false)
+    } else {
+      animationId = window.requestAnimationFrame(step)
+    }
+
+    return () => {
+      window.removeEventListener('resize', resize)
+      window.cancelAnimationFrame(animationId)
+      observer.disconnect()
+    }
+  }, [reducedMotion])
+
+  return <canvas ref={canvasRef} className="sky__hud-canvas" />
+}
+
 export function SkyScene({ theme, reducedMotion }: SkySceneProps) {
   const sceneRef = useRef<HTMLDivElement>(null)
   const farPuffs = useMemo(() => makePuffs(11, 6), [])
@@ -284,6 +411,12 @@ export function SkyScene({ theme, reducedMotion }: SkySceneProps) {
       {renderLayer('mid', midPuffs)}
       <SkyCanvas theme={theme} reducedMotion={reducedMotion} />
       {renderLayer('near', nearPuffs)}
+      <div className="sky__hud">
+        <div className="sky__hud-mesh" />
+        <div className="sky__hud-floor" />
+        <div className="sky__hud-scan" />
+        <HudCanvas reducedMotion={reducedMotion} />
+      </div>
       <div className="sky__scrim" />
     </div>
   )

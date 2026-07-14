@@ -56,3 +56,4 @@
 - Added the third eSystem entry `semakan-id-delima` (Semakan ID DELIMa, https://e-delimaserasha.netlify.app/, green accent, `file-text` icon) via `src/data/systems.ts` only — no component changes needed.
 - Session resume on 2026-07-14: prior agent hit a usage limit before verification. Re-ran checks in this session — `npm run test` 14/14 across 3 files, `npm run lint` clean, `npm run build` green (Vite 8.1.4). No further code changes required.
 - Theme persistence removed: every visit defaults to time-based `auto` (URL `?theme=` still overrides). Manual navbar cycling is session-only; no `localStorage` for theme.
+- Added a clear digital HUD veil over the sky (intensity B): crest-gold/navy theme-aware mesh + perspective floor grid, scan sweep, dual tech rings on the sun/moon orb, and a light node-link canvas. Mobile uses coarser grid and fewer nodes; reduced-motion freezes orbit/scan and draws a static network.

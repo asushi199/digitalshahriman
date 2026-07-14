@@ -30,6 +30,12 @@
   --outline: rgba(255, 255, 255, 0.72);
   --hairline: rgba(255, 255, 255, 0.12);
   --shadow-ink: rgba(2, 4, 10, 0.35);
+  /* Hud digital: cukup jelas supaya 'rasa digital' kelihatan sepintas lalu. */
+  --hud-opacity: 0.72;
+  --hud-line: rgba(255, 210, 74, 0.38);
+  --hud-line-soft: rgba(140, 185, 255, 0.28);
+  --hud-glow: rgba(255, 210, 74, 0.55);
+  --hud-node: #ffd24a;
 }
 
 /* Subuh: kabus ungu-jingga lembut, matahari baru terbit rendah. */
@@ -48,6 +54,11 @@
   --orb-top: 46%;
   --orb-right: 72%;
   --scrim: rgba(30, 14, 30, 0.45);
+  --hud-opacity: 0.6;
+  --hud-line: rgba(255, 220, 150, 0.42);
+  --hud-line-soft: rgba(255, 180, 130, 0.28);
+  --hud-glow: rgba(255, 190, 110, 0.5);
+  --hud-node: #ffe09a;
 }
 
 /* Siang: langit biru cerah — teks dan kaca bertukar gelap-atas-cerah. */
@@ -73,6 +84,11 @@
   --scrim: rgba(58, 110, 160, 0.28);
   --scrim-top: rgba(90, 140, 190, 0.2);
   --shadow-ink: rgba(40, 70, 100, 0.25);
+  --hud-opacity: 0.55;
+  --hud-line: rgba(20, 48, 74, 0.32);
+  --hud-line-soft: rgba(245, 158, 11, 0.36);
+  --hud-glow: rgba(245, 158, 11, 0.5);
+  --hud-node: #d97706;
 }
 
 /* Senja: bara jingga-merah, matahari hampir terbenam. */
@@ -91,6 +107,11 @@
   --orb-top: 44%;
   --orb-right: 12%;
   --scrim: rgba(36, 10, 24, 0.48);
+  --hud-opacity: 0.68;
+  --hud-line: rgba(255, 190, 110, 0.44);
+  --hud-line-soft: rgba(255, 120, 80, 0.3);
+  --hud-glow: rgba(255, 150, 80, 0.55);
+  --hud-node: #ffb45e;
 }
 
 * {
@@ -312,6 +333,10 @@ a {
   opacity: 0.5;
 }
 
+.sky--photo .sky__hud {
+  opacity: calc(var(--hud-opacity) * 0.75);
+}
+
 .sky__orb {
   position: absolute;
   top: var(--orb-top);
@@ -331,6 +356,35 @@ a {
     background 1.2s ease,
     box-shadow 1.2s ease;
   transform: translate3d(calc(var(--par-x) * -6px), calc(var(--par-y) * -4px), 0);
+}
+
+/* Gelang tech pada matahari/bulan — rasa digital tanpa menyembunyikan orb. */
+.sky__orb::before,
+.sky__orb::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.sky__orb::before {
+  inset: -22%;
+  border: 1.5px dashed color-mix(in srgb, var(--hud-node) 70%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--hud-glow) 45%, transparent);
+  animation: hud-orbit 26s linear infinite;
+}
+
+.sky__orb::after {
+  inset: -38%;
+  border: 1px solid color-mix(in srgb, var(--hud-line-soft) 80%, transparent);
+  opacity: 0.85;
+  animation: hud-orbit 40s linear infinite reverse;
+}
+
+@keyframes hud-orbit {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .sky__clouds {
@@ -393,9 +447,82 @@ a {
   height: 100%;
 }
 
+/* Lapisan HUD digital di atas awan, di bawah scrim tajuk. */
+.sky__hud {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: var(--hud-opacity);
+  pointer-events: none;
+  transition: opacity 1.2s ease;
+  transform: translate3d(calc(var(--par-x) * 4px), calc(var(--par-y) * 3px), 0);
+}
+
+.sky__hud-mesh {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--hud-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hud-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 78% 68% at 50% 42%, #000 18%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 78% 68% at 50% 42%, #000 18%, transparent 78%);
+  opacity: 0.85;
+}
+
+.sky__hud-floor {
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  bottom: -8%;
+  height: 58%;
+  background-image:
+    linear-gradient(90deg, var(--hud-line-soft) 1px, transparent 1px),
+    linear-gradient(var(--hud-glow) 1.5px, transparent 1.5px);
+  background-size: 56px 42px;
+  transform: perspective(520px) rotateX(62deg);
+  transform-origin: 50% 100%;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 42%, transparent 96%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 42%, transparent 96%);
+  opacity: 0.9;
+}
+
+.sky__hud-scan {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--hud-glow) 22%, transparent) 48%,
+    transparent 56%
+  );
+  background-size: 100% 220%;
+  animation: hud-scan 7.5s ease-in-out infinite;
+  mix-blend-mode: soft-light;
+  opacity: 0.7;
+}
+
+@keyframes hud-scan {
+  from {
+    background-position: 0 -40%;
+  }
+
+  to {
+    background-position: 0 140%;
+  }
+}
+
+.sky__hud-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .sky__scrim {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background:
     linear-gradient(180deg, var(--scrim-top) 0%, transparent 26%),
     linear-gradient(0deg, var(--scrim) 0%, transparent 38%);
@@ -747,6 +874,28 @@ a {
     box-shadow: 0 0 48px 20px var(--orb-glow);
   }
 
+  .sky__orb::before {
+    inset: -16%;
+  }
+
+  .sky__orb::after {
+    inset: -28%;
+  }
+
+  .sky__hud-mesh {
+    background-size: 56px 56px;
+    opacity: 0.7;
+  }
+
+  .sky__hud-floor {
+    height: 48%;
+    background-size: 64px 48px;
+  }
+
+  .sky__hud-scan {
+    opacity: 0.45;
+  }
+
   .hero {
     padding-top: 4.6rem;
   }
@@ -773,6 +922,12 @@ a {
     animation: none;
   }
 
+  .sky__orb::before,
+  .sky__orb::after,
+  .sky__hud-scan {
+    animation: none;
+  }
+
   .hero__sparkle {
     animation: none;
     opacity: 0.8;
@@ -782,6 +937,7 @@ a {
   .sky__orb,
   .sky__gradient,
   .sky__photo,
+  .sky__hud,
   .rail__card,
   .navbar,
   .navbar__toggle,
