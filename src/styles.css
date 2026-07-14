@@ -43,6 +43,10 @@ img {
   max-width: 100%;
 }
 
+img[hidden] {
+  display: none;
+}
+
 .portal-loader {
   position: fixed;
   z-index: 100;

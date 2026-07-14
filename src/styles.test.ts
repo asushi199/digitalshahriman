@@ -12,3 +12,9 @@ describe('responsive touch behavior', () => {
     )
   })
 })
+
+describe('failed image fallbacks', () => {
+  it('keeps hidden images out of layout after a load error', () => {
+    expect(styles).toMatch(/img\[hidden\]\s*\{[^}]*display:\s*none;/s)
+  })
+})
