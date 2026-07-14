@@ -1,9 +1,7 @@
-export const THEME_KEY = 'serasha-theme'
-
 export const THEMES = ['night', 'dawn', 'day', 'dusk'] as const
 export type Theme = (typeof THEMES)[number]
 
-/** 'auto' mengikut jam tempatan; nilai lain mengunci tema secara manual. */
+/** 'auto' mengikut jam tempatan; nilai lain mengunci tema untuk sesi ini sahaja. */
 export type ThemePreference = Theme | 'auto'
 
 export const PREFERENCE_CYCLE: ThemePreference[] = [
@@ -36,19 +34,13 @@ export function nextPreference(current: ThemePreference): ThemePreference {
   return PREFERENCE_CYCLE[(index + 1) % PREFERENCE_CYCLE.length]
 }
 
+/** Setiap lawatan lalai ke auto; hanya `?theme=` boleh menyahsaatnya. */
 export function initialPreference(): ThemePreference {
   try {
     const param = new URLSearchParams(window.location.search).get('theme')
     if (isPreference(param)) return param
   } catch {
-    // URL tidak boleh dibaca; teruskan ke pilihan berikutnya.
-  }
-
-  try {
-    const stored = localStorage.getItem(THEME_KEY)
-    if (isPreference(stored)) return stored
-  } catch {
-    // Storan boleh gagal tanpa menyekat portal.
+    // URL tidak boleh dibaca; teruskan ke automatic.
   }
 
   return 'auto'

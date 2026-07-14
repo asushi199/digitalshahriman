@@ -11,7 +11,6 @@ import { systems } from './data/systems'
 import {
   initialPreference,
   nextPreference,
-  THEME_KEY,
   themeForTime,
   type Theme,
   type ThemePreference,
@@ -48,11 +47,6 @@ export default function App() {
     setPreference((current) => {
       const next = nextPreference(current)
       if (next === 'auto') setClockTheme(themeForTime())
-      try {
-        localStorage.setItem(THEME_KEY, next)
-      } catch {
-        // Pilihan tema hanya keutamaan; kegagalan storan tidak kritikal.
-      }
       return next
     })
   }, [])

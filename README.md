@@ -51,7 +51,7 @@ Letakkan imej dalam `public/hero/` dan isi laluan di atas — imej akan menjadi 
 
 ## Tema empat suasana
 
-Secara lalai portal berada dalam mod **automatik**: langit mengikut jam tempatan pelawat dan bertukar sendiri apabila tiba waktunya (subuh 6:00–9:00, siang 9:00–17:00, senja 17:00–19:30, selebihnya malam). Butang di bar navigasi menggilir `Automatik → Subuh → Siang → Senja → Malam` dan pilihan disimpan dalam `localStorage`. Tema juga boleh dipaksa melalui parameter URL `?theme=dawn|day|dusk|night|auto`.
+Setiap kali dibuka, portal berada dalam mod **automatik**: langit mengikut jam tempatan pelawat dan bertukar sendiri apabila tiba waktunya (subuh 6:00–9:00, siang 9:00–17:00, senja 17:00–19:30, selebihnya malam). Butang di bar navigasi menggilir `Automatik → Subuh → Siang → Senja → Malam` untuk sesi semasa sahaja (tidak disimpan). Tema juga boleh dipaksa melalui parameter URL `?theme=dawn|day|dusk|night|auto`.
 
 ## Skop dan kebolehcapaian
 

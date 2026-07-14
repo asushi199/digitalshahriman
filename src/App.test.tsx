@@ -32,36 +32,31 @@ describe('App', () => {
     expect(document.documentElement.dataset.theme).toBe(themeForTime())
   })
 
-  it('cycles manual themes and persists the choice', async () => {
+  it('cycles manual themes for the current session only', async () => {
     const user = userEvent.setup()
-    localStorage.setItem('serasha-theme', 'dawn')
     render(<App />)
-
-    expect(document.documentElement.dataset.theme).toBe('dawn')
 
     await user.click(screen.getByRole('button', { name: /Tukar tema/i }))
 
-    expect(document.documentElement.dataset.theme).toBe('day')
-    expect(localStorage.getItem('serasha-theme')).toBe('day')
+    expect(document.documentElement.dataset.theme).toBe('dawn')
+    expect(localStorage.getItem('serasha-theme')).toBeNull()
   })
 
   it('returns to automatic mode after the night theme', async () => {
     const user = userEvent.setup()
-    localStorage.setItem('serasha-theme', 'night')
     render(<App />)
 
     await user.click(screen.getByRole('button', { name: /Tukar tema/i }))
+    await user.click(screen.getByRole('button', { name: /Tukar tema/i }))
+    await user.click(screen.getByRole('button', { name: /Tukar tema/i }))
+    await user.click(screen.getByRole('button', { name: /Tukar tema/i }))
+    await user.click(screen.getByRole('button', { name: /Tukar tema/i }))
 
-    expect(localStorage.getItem('serasha-theme')).toBe('auto')
     expect(document.documentElement.dataset.theme).toBe(themeForTime())
   })
 })
 
 describe('theme helpers', () => {
-  afterEach(() => {
-    localStorage.clear()
-  })
-
   it('maps the clock to dawn, day, dusk, and night windows', () => {
     expect(themeForTime(new Date('2026-07-14T07:00:00'))).toBe('dawn')
     expect(themeForTime(new Date('2026-07-14T12:00:00'))).toBe('day')
@@ -78,11 +73,8 @@ describe('theme helpers', () => {
     expect(nextPreference('night')).toBe('auto')
   })
 
-  it('prefers a stored choice and defaults to automatic', () => {
+  it('defaults every visit to automatic and ignores stored theme', () => {
     localStorage.setItem('serasha-theme', 'dusk')
-    expect(initialPreference()).toBe('dusk')
-
-    localStorage.clear()
     expect(initialPreference()).toBe('auto')
   })
 })

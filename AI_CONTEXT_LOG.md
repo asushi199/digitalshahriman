@@ -55,3 +55,4 @@
 - Fixes: on ≤768px screens backdrop-filter is removed and replaced with an `inset 0 0 0 999px` self-tint shadow to keep contrast; the canvas caps DPR at 1.25 with fewer stars (width/14) and 10 particles; cloud puffs 5+ per layer are hidden and blur radii roughly halved; the orb keeps a single smaller glow; cloud spans gained `will-change: transform`.
 - Added the third eSystem entry `semakan-id-delima` (Semakan ID DELIMa, https://e-delimaserasha.netlify.app/, green accent, `file-text` icon) via `src/data/systems.ts` only — no component changes needed.
 - Session resume on 2026-07-14: prior agent hit a usage limit before verification. Re-ran checks in this session — `npm run test` 14/14 across 3 files, `npm run lint` clean, `npm run build` green (Vite 8.1.4). No further code changes required.
+- Theme persistence removed: every visit defaults to time-based `auto` (URL `?theme=` still overrides). Manual navbar cycling is session-only; no `localStorage` for theme.

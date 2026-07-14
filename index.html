@@ -12,6 +12,7 @@
     <title>Portal Digital SERASHA · SMK Raja Shahriman</title>
     <script>
       // Tetapkan tema sebelum lukisan pertama untuk mengelakkan kelipan.
+      // Setiap lawatan mengikut jam tempatan; hanya ?theme= boleh menyahsaat.
       ;(function () {
         var themes = ['night', 'dawn', 'day', 'dusk']
         var pref
@@ -19,13 +20,6 @@
           pref = new URLSearchParams(window.location.search).get('theme')
         } catch (error) {
           pref = null
-        }
-        if (themes.indexOf(pref) < 0 && pref !== 'auto') {
-          try {
-            pref = localStorage.getItem('serasha-theme')
-          } catch (error) {
-            pref = null
-          }
         }
         var theme = pref
         if (themes.indexOf(theme) < 0) {
