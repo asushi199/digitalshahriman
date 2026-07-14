@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import type { PointerEvent } from 'react'
 
 const MAX_TRANSLATION = 12
+const TABLET_TRANSLATION = 6
 
 interface RobotSceneProps {
   reducedMotion: boolean
@@ -25,9 +26,10 @@ export function RobotScene({ reducedMotion }: RobotSceneProps) {
     const bounds = event.currentTarget.getBoundingClientRect()
     const relativeX = (event.clientX - bounds.left) / bounds.width - 0.5
     const relativeY = (event.clientY - bounds.top) / bounds.height - 0.5
+    const maxTranslation = bounds.width <= 768 ? TABLET_TRANSLATION : MAX_TRANSLATION
 
-    targetX.set(relativeX * MAX_TRANSLATION * 2)
-    targetY.set(relativeY * MAX_TRANSLATION * 2)
+    targetX.set(relativeX * maxTranslation * 2)
+    targetY.set(relativeY * maxTranslation * 2)
   }
 
   const resetPointer = () => {
@@ -58,7 +60,14 @@ export function RobotScene({ reducedMotion }: RobotSceneProps) {
         animate={reducedMotion ? undefined : { translateY: [0, -5, 0] }}
         transition={{ duration: 5.5, ease: 'easeInOut', repeat: Infinity }}
       >
-        <img src="/mascot/smkrs-robot.png" alt="" draggable="false" />
+        <img
+          src="/mascot/smkrs-robot.png"
+          alt=""
+          draggable="false"
+          onError={(event) => {
+            event.currentTarget.hidden = true
+          }}
+        />
       </motion.div>
       <div className="robot-scene__light-sweep" />
       <div className="robot-scene__foreground" />

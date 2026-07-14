@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react'
 import { FeaturedRail } from './components/FeaturedRail'
 import { HeroSection } from './components/HeroSection'
 import { PortalLoader } from './components/PortalLoader'
+import { SiteFooter } from './components/SiteFooter'
 import { SystemDirectory } from './components/SystemDirectory'
 import { systems } from './data/systems'
 
@@ -43,6 +44,7 @@ export default function App() {
           <SystemDirectory systems={systems} />
         </section>
       </main>
+      <SiteFooter />
     </>
   )
 }

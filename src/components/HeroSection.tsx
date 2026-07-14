@@ -23,7 +23,13 @@ export function HeroSection({ reducedMotion }: HeroSectionProps) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="hero__eyebrow">
-            <img src="/brand/smkrs-crest.jpg" alt="Lencana SMK Raja Shahriman" />
+            <img
+              src="/brand/smkrs-crest.jpg"
+              alt="Lencana SMK Raja Shahriman"
+              onError={(event) => {
+                event.currentTarget.hidden = true
+              }}
+            />
             <span>
               Portal Rasmi
               <strong>SMK Raja Shahriman</strong>
