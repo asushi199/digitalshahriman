@@ -13,22 +13,28 @@
     <script>
       // Tetapkan tema sebelum lukisan pertama untuk mengelakkan kelipan.
       ;(function () {
-        var theme
+        var themes = ['night', 'dawn', 'day', 'dusk']
+        var pref
         try {
-          theme = new URLSearchParams(window.location.search).get('theme')
+          pref = new URLSearchParams(window.location.search).get('theme')
         } catch (error) {
-          theme = null
+          pref = null
         }
-        if (theme !== 'day' && theme !== 'night') {
+        if (themes.indexOf(pref) < 0 && pref !== 'auto') {
           try {
-            theme = localStorage.getItem('serasha-theme')
+            pref = localStorage.getItem('serasha-theme')
           } catch (error) {
-            theme = null
+            pref = null
           }
         }
-        if (theme !== 'day' && theme !== 'night') {
-          var hour = new Date().getHours()
-          theme = hour >= 7 && hour < 19 ? 'day' : 'night'
+        var theme = pref
+        if (themes.indexOf(theme) < 0) {
+          var now = new Date()
+          var minutes = now.getHours() * 60 + now.getMinutes()
+          if (minutes >= 360 && minutes < 540) theme = 'dawn'
+          else if (minutes >= 540 && minutes < 1020) theme = 'day'
+          else if (minutes >= 1020 && minutes < 1170) theme = 'dusk'
+          else theme = 'night'
         }
         document.documentElement.dataset.theme = theme
       })()

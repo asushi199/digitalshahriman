@@ -1,6 +1,10 @@
 export interface HeroImageSlots {
+  /** Laluan imej latar penuh untuk tema subuh, contohnya '/hero/sekolah-subuh.jpg'. */
+  dawn?: string
   /** Laluan imej latar penuh untuk tema siang, contohnya '/hero/sekolah-siang.jpg'. */
   day?: string
+  /** Laluan imej latar penuh untuk tema senja, contohnya '/hero/sekolah-senja.jpg'. */
+  dusk?: string
   /** Laluan imej latar penuh untuk tema malam, contohnya '/hero/sekolah-malam.jpg'. */
   night?: string
 }

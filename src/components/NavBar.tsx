@@ -1,16 +1,32 @@
-import { Moon, Sun } from 'lucide-react'
+import { Clock, Moon, Sun, Sunrise, Sunset } from 'lucide-react'
 
 import { site } from '../data/site'
-import type { Theme } from './SkyScene'
+import type { ThemePreference } from '../lib/theme'
 
-interface NavBarProps {
-  theme: Theme
-  onToggleTheme: () => void
+const PREFERENCE_LABELS: Record<ThemePreference, string> = {
+  auto: 'Automatik (ikut waktu)',
+  dawn: 'Subuh',
+  day: 'Siang',
+  dusk: 'Senja',
+  night: 'Malam',
 }
 
-export function NavBar({ theme, onToggleTheme }: NavBarProps) {
-  const nextLabel =
-    theme === 'day' ? 'Tukar ke tema malam' : 'Tukar ke tema siang'
+const PREFERENCE_ICONS: Record<ThemePreference, typeof Sun> = {
+  auto: Clock,
+  dawn: Sunrise,
+  day: Sun,
+  dusk: Sunset,
+  night: Moon,
+}
+
+interface NavBarProps {
+  preference: ThemePreference
+  onCycleTheme: () => void
+}
+
+export function NavBar({ preference, onCycleTheme }: NavBarProps) {
+  const label = `Tema: ${PREFERENCE_LABELS[preference]}. Tukar tema seterusnya.`
+  const Icon = PREFERENCE_ICONS[preference]
 
   return (
     <header className="navbar">
@@ -30,12 +46,11 @@ export function NavBar({ theme, onToggleTheme }: NavBarProps) {
       <button
         type="button"
         className="navbar__toggle"
-        aria-label={nextLabel}
-        title={nextLabel}
-        onClick={onToggleTheme}
+        aria-label={label}
+        title={label}
+        onClick={onCycleTheme}
       >
-        <Sun className="navbar__toggle-sun" aria-hidden="true" />
-        <Moon className="navbar__toggle-moon" aria-hidden="true" />
+        <Icon aria-hidden="true" />
       </button>
     </header>
   )

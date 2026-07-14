@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 
 import { site } from '../data/site'
-
-export type Theme = 'day' | 'night'
+import { THEMES, type Theme } from '../lib/theme'
 
 interface SkySceneProps {
   theme: Theme
@@ -96,14 +95,17 @@ function SkyCanvas({ theme, reducedMotion }: SkySceneProps) {
     let animationId = 0
 
     const resize = () => {
-      const ratio = Math.min(window.devicePixelRatio || 1, 2)
       width = canvas.clientWidth
       height = canvas.clientHeight
+      // Skrin sempit dilukis pada resolusi lebih rendah dan zarah lebih
+      // sedikit supaya peranti mudah alih kekal lancar.
+      const isNarrow = width < 768
+      const ratio = Math.min(window.devicePixelRatio || 1, isNarrow ? 1.25 : 2)
       canvas.width = Math.round(width * ratio)
       canvas.height = Math.round(height * ratio)
       context.setTransform(ratio, 0, 0, ratio, 0, 0)
 
-      stars = Array.from({ length: Math.round(width / 9) }, () => ({
+      stars = Array.from({ length: Math.round(width / (isNarrow ? 14 : 9)) }, () => ({
         x: Math.random() * width,
         y: Math.random() * height * 0.72,
         radius: 0.4 + Math.random() * 1.1,
@@ -111,7 +113,7 @@ function SkyCanvas({ theme, reducedMotion }: SkySceneProps) {
         speed: 0.008 + Math.random() * 0.02,
       }))
 
-      const target = width < 768 ? 14 : 28
+      const target = isNarrow ? 10 : 28
       particles = Array.from({ length: target }, () =>
         spawnParticle(themeRef.current === 'night' ? 'snow' : 'leaf', width, height, false),
       )
@@ -219,7 +221,7 @@ export function SkyScene({ theme, reducedMotion }: SkySceneProps) {
   const farPuffs = useMemo(() => makePuffs(11, 6), [])
   const midPuffs = useMemo(() => makePuffs(29, 6), [])
   const nearPuffs = useMemo(() => makePuffs(47, 5), [])
-  const hasPhoto = Boolean(site.heroImage.day || site.heroImage.night)
+  const hasPhoto = THEMES.some((name) => Boolean(site.heroImage[name]))
 
   useEffect(() => {
     if (reducedMotion) return
@@ -264,14 +266,19 @@ export function SkyScene({ theme, reducedMotion }: SkySceneProps) {
       className={`sky${hasPhoto ? ' sky--photo' : ''}`}
       aria-hidden="true"
     >
-      {site.heroImage.day ? (
-        <img className="sky__photo sky__photo--day" src={site.heroImage.day} alt="" />
-      ) : null}
-      {site.heroImage.night ? (
-        <img className="sky__photo sky__photo--night" src={site.heroImage.night} alt="" />
-      ) : null}
-      <div className="sky__gradient sky__gradient--day" />
-      <div className="sky__gradient sky__gradient--night" />
+      {THEMES.map((name) =>
+        site.heroImage[name] ? (
+          <img
+            key={name}
+            className={`sky__photo sky__photo--${name}`}
+            src={site.heroImage[name]}
+            alt=""
+          />
+        ) : null,
+      )}
+      {THEMES.map((name) => (
+        <div key={name} className={`sky__gradient sky__gradient--${name}`} />
+      ))}
       <div className="sky__orb" />
       {renderLayer('far', farPuffs)}
       {renderLayer('mid', midPuffs)}

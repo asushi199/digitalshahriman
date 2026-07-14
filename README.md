@@ -1,6 +1,6 @@
 # Portal Digital SERASHA
 
-Portal satu skrin bergaya sinematik untuk warga SMK Raja Shahriman (SERASHA), Beruas, Perak. Halaman ini memaparkan skrin pemuatan peratusan, langit animasi penuh kod dengan tema siang/malam, tipografi paparan besar, dan rel kad eSistem yang bergerak tanpa henti di bahagian bawah. Dibina dengan React, TypeScript dan Vite.
+Portal satu skrin bergaya sinematik untuk warga SMK Raja Shahriman (SERASHA), Beruas, Perak. Halaman ini memaparkan skrin pemuatan peratusan, langit animasi penuh kod dengan empat suasana (subuh, siang, senja, malam), tipografi paparan besar, dan rel kad eSistem yang boleh diseret di bahagian bawah. Dibina dengan React, TypeScript dan Vite.
 
 ## Jalankan secara tempatan
 
@@ -36,21 +36,23 @@ Semua rekod berada di `src/data/systems.ts` dan mematuhi kontrak `SystemEntry` (
 
 ## Identiti sekolah dan imej latar
 
-Maklumat sekolah (nama, cogan kata, baris hak cipta) berada di `src/data/site.ts`. Fail yang sama menyediakan slot `heroImage`:
+Maklumat sekolah (nama, cogan kata, baris hak cipta) berada di `src/data/site.ts`. Fail yang sama menyediakan slot `heroImage` untuk setiap suasana:
 
 ```ts
 heroImage: {
+  dawn: '/hero/sekolah-subuh.jpg',
   day: '/hero/sekolah-siang.jpg',
+  dusk: '/hero/sekolah-senja.jpg',
   night: '/hero/sekolah-malam.jpg',
 },
 ```
 
 Letakkan imej dalam `public/hero/` dan isi laluan di atas — imej akan menjadi latar penuh skrin dan lapisan awan kod bertukar menjadi hiasan nipis. Biarkan kosong untuk kekal dengan langit animasi penuh kod.
 
-## Tema siang/malam
+## Tema empat suasana
 
-Butang di bar navigasi menukar tema dan pilihan disimpan dalam `localStorage`. Tema awal mengikut jam tempatan pelawat (7 pagi–7 malam = siang) dan boleh dipaksa melalui parameter URL `?theme=day` atau `?theme=night`.
+Secara lalai portal berada dalam mod **automatik**: langit mengikut jam tempatan pelawat dan bertukar sendiri apabila tiba waktunya (subuh 6:00–9:00, siang 9:00–17:00, senja 17:00–19:30, selebihnya malam). Butang di bar navigasi menggilir `Automatik → Subuh → Siang → Senja → Malam` dan pilihan disimpan dalam `localStorage`. Tema juga boleh dipaksa melalui parameter URL `?theme=dawn|day|dusk|night|auto`.
 
 ## Skop dan kebolehcapaian
 
-Portal ini statik tanpa pangkalan data. Ia menghormati `prefers-reduced-motion` (skrin pemuatan dilangkau, rel menjadi senarai statik yang boleh ditatal), mengekalkan fokus papan kekunci yang jelas, dan gagal terbuka apabila storan pelayar disekat.
+Portal ini statik tanpa pangkalan data. Rel eSistem ditatal secara seretan tetikus, leretan sentuhan, atau papan kekunci. Ia menghormati `prefers-reduced-motion` (skrin pemuatan dilangkau, animasi latar dimatikan), mengekalkan fokus papan kekunci yang jelas, dan gagal terbuka apabila storan pelayar disekat.

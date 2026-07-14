@@ -23,4 +23,15 @@ export const systems: SystemEntry[] = ([
     featured: true,
     order: 2,
   },
+  {
+    id: 'semakan-id-delima',
+    name: 'Semakan ID DELIMa',
+    description: 'Semak ID DELIMa murid dan guru SERASHA.',
+    category: 'Sokongan Digital',
+    url: 'https://e-delimaserasha.netlify.app/',
+    icon: 'file-text',
+    accent: '#22b573',
+    featured: true,
+    order: 3,
+  },
 ] satisfies SystemEntry[]).sort((a, b) => a.order - b.order)
