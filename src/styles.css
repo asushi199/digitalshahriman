@@ -881,7 +881,7 @@ img {
   }
 
   .featured-rail__track {
-    grid-auto-columns: calc(100vw - 3rem);
+    grid-auto-columns: minmax(0, 100%);
   }
 }
 
