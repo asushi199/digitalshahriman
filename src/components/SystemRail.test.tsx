@@ -42,6 +42,21 @@ describe('SystemRail', () => {
     }
   })
 
+  it('still opens a card on a plain mouse click without dragging', () => {
+    const { container } = render(<SystemRail systems={sampleSystems} />)
+    const track = container.querySelector('.rail__track')!
+    const link = screen.getAllByRole('link')[0]
+    const onNavigate = vi.fn()
+    link.addEventListener('click', onNavigate)
+
+    fireEvent.pointerDown(track, { pointerType: 'mouse', clientX: 200, pointerId: 1 })
+    fireEvent.pointerUp(track, { pointerType: 'mouse', clientX: 200, pointerId: 1 })
+    fireEvent.click(link)
+
+    expect(onNavigate).toHaveBeenCalledTimes(1)
+    expect(track).not.toHaveClass('rail__track--dragging')
+  })
+
   it('suppresses the click that ends a mouse drag', () => {
     const { container } = render(<SystemRail systems={sampleSystems} />)
     const track = container.querySelector('.rail__track')!

@@ -37,8 +37,8 @@ export function SystemRail({ systems }: SystemRailProps) {
       scrollStart: track.scrollLeft,
       moved: false,
     }
-    track.setPointerCapture?.(event.pointerId)
-    setDragging(true)
+    // Tangkap penunjuk hanya selepas ambang seretan — tangkapan awal
+    // + pointer-events:none membuat klik biasa gagal membuka pautan.
   }
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -47,14 +47,23 @@ export function SystemRail({ systems }: SystemRailProps) {
     if (!track) return
 
     const delta = event.clientX - drag.current.startX
-    if (Math.abs(delta) > DRAG_THRESHOLD) drag.current.moved = true
+    if (Math.abs(delta) <= DRAG_THRESHOLD) return
+
+    if (!drag.current.moved) {
+      drag.current.moved = true
+      track.setPointerCapture?.(event.pointerId)
+      setDragging(true)
+    }
+
     track.scrollLeft = drag.current.scrollStart - delta
   }
 
   const handlePointerEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (!drag.current.active) return
     drag.current.active = false
-    trackRef.current?.releasePointerCapture?.(event.pointerId)
+    if (drag.current.moved) {
+      trackRef.current?.releasePointerCapture?.(event.pointerId)
+    }
     setDragging(false)
   }
 
